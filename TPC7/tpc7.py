@@ -45,7 +45,7 @@ def carregaTabMeteo(fnome):
 
 def minTMin(tabMeteo):
     minimo = tabMeteo[0][1]
-    for data, min, *_ in tabMeteo:
+    for data, min,_,_ in tabMeteo:
          if minimo > min:
               minimo = min
     return minimo
@@ -75,24 +75,24 @@ def diasPrecSup(tabMeteo, p):
     return res
 
 def maxSemChuva(tabMeteo, p):
-    consecLocal = 0
-    consecGlobal = 0
+    local = 0
+    glob = 0
     for data, min, max, prec in tabMeteo:
         if prec < p:
-            consecLocal += 1
+            local += 1
         else:
-            if consecLocal > consecGlobal:
-                consecGlobal = consecLocal
-            consecLocal = 0
-    if consecLocal > consecGlobal:
-        consecGlobal = consecLocal
-    return consecGlobal
+            if local > glob:
+                glob = local
+            local = 0
+    if local > glob:
+        glob = local
+    return glob
 
 import matplotlib.pyplot as plt
 
 def grafTabMeteo(t):
     datas = [f"{data[0]}-{data[1]}-{data[2]}" for data,  *_ in t]
-    temp_min = [ min for _, min, *_ in t] #y
+    temp_min = [ min for _, min, *_ in t] 
     temp_max = [ max for _, _, max, _, in t]
     precs = [prec for _, _, _, prec in t]
 
@@ -127,18 +127,18 @@ def menu():
             guardaTabMeteo(tabMeteo1, "meteorologia.txt")
         elif opcao == 3:
             tabMeteo2 = carregaTabMeteo("meteorologia.txt") 
-            print("Tabela carregada:", tabMeteo2)
+            print("Tabela:", tabMeteo2)
         elif opcao == 4:
             print("Temperatura mínima mais baixa:", minTMin(tabMeteo1))
         elif opcao == 5:
-            print("Amplitude térmica diária:", amplTerm(tabMeteo1))
+            print("Amplitude térmica:", amplTerm(tabMeteo1))
         elif opcao == 6:
             print("Data e valor da precipitação máxima:", maxPrec(tabMeteo1))
         elif opcao == 7:
-            p = float(input("Digite o valor de precipitação p: "))
+            p = float(input("valor de precipitação p: "))
             print("Dias com precipitação superior a p:", diasPrecSup(tabMeteo1, p))
         elif opcao == 8:
-            p = float(input("Digite o valor de precipitação p: "))
+            p = float(input("valor de precipitação p: "))
             print("Maior sequência de dias com precipitação abaixo de p:", maxSemChuva(tabMeteo1, p))
         elif opcao == 9:
             grafTabMeteo(tabMeteo1)
